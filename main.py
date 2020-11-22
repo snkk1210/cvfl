@@ -1,32 +1,14 @@
 #!/bin/python3
 
 from flask import Flask, render_template
-from flask_httpauth import HTTPBasicAuth
 import flask
 import subprocess
 import os
 import glob
 app = Flask(__name__)
-#auth = HTTPBasicAuth()
-
-#users = {
-#    "sanuki": "n.7cQ~kZaAae"
-#}
-
-#@auth.get_password
-##def get_pw(username):
-#    if username in users:
-#        return users.get(username)
-#    return None
 
 @app.route('/')
-#@auth.login_required
 def lambda_handler(event=None, context=None):
-
-        # 一時ファイルを削除
-        #for tmpfile in glob.glob('/tmp/*'):
-        #        os.remove(tmpfile)
-
 	return render_template('layout.html')
 
 @app.route('/certificate-upload', methods=['POST'])
