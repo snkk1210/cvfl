@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang = "ja">
+                <head>
+                        <mera charset = "UFT-8">
+                        <link rel="stylesheet" href="/certificateCheck/static/css/default.css" type="text/css">
+                <title>cert_check tool</title>
+                </head>
+        <body>
+		<h4><font color="red">{{ message }}</font></h4>
+                <h4>証明書の整合性確認</h4>
+                <div class="cp_iptxt">
+                        <p>証明書<form action="/certificateCheck/certificate-upload" enctype="multipart/form-data" method="post"><input name="certificate" type="file"> <input type="submit" value="アップロード"></form>
+                </div>
+                <div class="cp_iptxt">
+                        <p>秘密鍵<form action="/certificateCheck/privatekey-upload" enctype="multipart/form-data" method="post"><input name="privatekey" type="file"> <input type="submit" value="アップロード"></form>
+                </div>
+                <div class="cp_iptxt">
+                        <p>中間証明書<form action="/certificateCheck/ca-upload" enctype="multipart/form-data" method="post"><input name="intermediate" type="file"> <input type="submit" value="アップロード"></form>
+                </div>
+                <form method="post" action="/certificateCheck/exec-script">
+                <input type="submit" name="s" value="実行">
+                </form>
+		<h2>{{ restitle }}</h2>
+		<h2><font color="red">{{ result }}</font></h2>
+        </body>
+</html>
