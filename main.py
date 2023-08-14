@@ -24,12 +24,9 @@ def exec():
 	res = subprocess.run('./app/cert_check.sh /tmp/cert.pem /tmp/privkey.pem /tmp/chain.pem', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
 	# 一時ファイルを削除
-	#for tmpfile in glob.glob('/tmp/*'):
-	#	os.remove(tmpfile)
-	#for crtfile in glob.glob('/tmp/*'):
-	#	os.remove(crtfile)
+	for tmpfile in glob.glob('/tmp/*.pem'):
+		os.remove(tmpfile)
 
-	#return res.stdout.decode("utf8")
 	mes = res.stdout.decode("utf8")
 	return render_template('layout.html', result=mes, restitle="実行結果")
 
