@@ -1,93 +1,59 @@
 #!/bin/bash
 
-##############################################################################
-#これは何？
-# 証明書、秘密鍵、中間証明書の整合性が保たれているか確認するスクリプトです
-#
-#使い方
-# 下記の通りに引数を指定して実行してください
-#
-# =====================
-# 第一引数に証明書
-# 第二引数に秘密鍵
-# 第三引数に中間証明書
-# =====================
-#
-# 実行結果がOKであれば整合性が保たれています
-# 証明書の期限も出力されます
-#
-#使用例
-#
-# ./cert_check.sh server.crt server.key server.ca.crt
-##############################################################################
-
-FILE1=/tmp/temp1.txt
-FILE2=/tmp/temp2.txt
-
-# エラー出力関数
-function stdout_error(){
-        echo "実行結果が不正です"
-        exit 1
-}
-
-# opensslコマンドの実行結果確認関数
-function error_check(){
-        if [ $? != 0 ]; then
-                stdout_error
-        fi
-}
-
-# 引数のチェック
+# MEMO: 引数チェック
 if [ $# != 3 ]; then
-        echo "正しく引数を指定してください"
+    echo "ERR:invalid argument"
+    exit 1
+fi
+
+# MEMO: エラー出力関数
+function checkExitCode(){
+    if [ $? != 0 ]; then
+        echo "ERR: ${1} status is not 0"
         exit 1
-fi
+    fi
+}
 
-# ファイルの初期化
-cat /dev/null > $FILE1
-cat /dev/null > $FILE2
+function isEmpty(){
+    if [ -z $1 ]; then
+        echo "ERR: ${2} is Empty"
+        exit 1
+    fi
+}
 
-# 証明書のハッシュ値を出力
-openssl x509 -noout -modulus -in $1 > /dev/null 2>&1
-error_check
-openssl x509 -noout -modulus -in $1 | md5sum 1> $FILE1 2> /dev/null
+# MEMO: 証明書ファイルの HASH 値 を出力
+CERT_HASH=`openssl x509 -noout -modulus -in ${1} | md5sum 2> /dev/null`
+checkExitCode "openssl x509 -noout -modulus -in ${1} | md5sum"
+isEmpty ${CERT_HASH} "CERT_HASH"
 
-# 秘密鍵のハッシュ値を出力
-openssl rsa -noout -modulus -in $2 > /dev/null 2>&1
-error_check
-openssl rsa -noout -modulus -in $2 | md5sum 1> $FILE2 2> /dev/null
+KEY_HASH=`openssl rsa -noout -modulus -in ${2} | md5sum 2> /dev/null`
+checkExitCode "openssl rsa -noout -modulus -in ${2} | md5sum"
+isEmpty ${KEY_HASH} "KEY_HASH"
 
-# 証明書のハッシュ値を出力
-openssl x509 -issuer_hash -noout -in $1 > /dev/null 2>&1
-error_check
-openssl x509 -issuer_hash -noout -in $1 1>> $FILE1 2> /dev/null
+CERT_ISSUER_HASH=`openssl x509 -issuer_hash -noout -in ${1} 2> /dev/null`
+checkExitCode "openssl x509 -issuer_hash -noout -in ${1}"
+isEmpty ${CERT_ISSUER_HASH} "CERT_ISSUER_HASH"
 
-# 中間証明書のハッシュ値を出力
-openssl x509 -subject_hash -noout -in $3 > /dev/null 2>&1
-error_check
-openssl x509 -subject_hash -noout -in $3 1>> $FILE2 2> /dev/null
+CA_SUBJECT_HASH=`openssl x509 -subject_hash -noout -in ${3} 2> /dev/null`
+checkExitCode "penssl x509 -subject_hash -noout -in ${3}"
+isEmpty ${CA_SUBJECT_HASH} "CA_SUBJECT_HASH"
 
-# ファイルに出力があるか確認
-if [ ! -s $FILE1 ]; then
-        stdout_error
-fi
-
-# 正しく出力されているか確認
-FILE1_line=`cat $FILE1 | wc -l`
-FILE2_line=`cat $FILE2 | wc -l`
-
-if [ $FILE1_line != 2 ]; then
-        stdout_error
-fi
-
-if [ $FILE2_line != 2 ]; then
-        stdout_error
-fi
-
-# 整合性確認
-if diff -q $FILE1 $FILE2 > /dev/null ; then
-        echo "OK"
-        openssl x509 -noout -dates -in $1
+# MEMO: 証明書 HASH と 鍵ファイル HASH を比較
+if [  "${CERT_HASH}" == "${KEY_HASH}" ]; then
+    echo "CERT_HASH and KEY_HASH are OK"
 else
-        echo "ERROR"
+    echo "CERT_HASH and KEY_HASH are NG"
+    exit 1
 fi
+
+# MEMO: 証明書 issuer HASH と CAファイル subject HASH を比較
+if [  "${CERT_ISSUER_HASH}" == "${CA_SUBJECT_HASH}" ]; then
+    echo "CERT_ISSUER_HASH and CA_SUBJECT_HASH are OK"
+else
+    echo "CERT_ISSUER_HASH and CA_SUBJECT_HASH are NG"
+    exit 1
+fi
+
+# MEMO: 証明書の期限を出力
+openssl x509 -noout -dates -in ${1}
+exit 0
