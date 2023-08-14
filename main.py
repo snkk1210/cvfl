@@ -58,14 +58,21 @@ def caupload():
 
 @app.route('/exec-script', methods=['POST'])
 def exec():
-	res = subprocess.run('./app/cert_check.sh /tmp/certificate.crt /tmp/privatekey.key /tmp/intermediate.ca', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+  
+	certificate_fs = flask.request.files['certificate']
+	certificate_fs.save('./certificate.crt')
+	privatekey_fs = flask.request.files['privatekey']
+	privatekey_fs.save('./privatekey.key')
+	intermediate_fs = flask.request.files['intermediate']
+	intermediate_fs.save('./intermediate.ca')
 
+	res = subprocess.run('./app/cert_check.sh ./certificate.crt ./privatekey.key ./intermediate.ca', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
 	# 一時ファイルを削除
-	for tmpfile in glob.glob('/tmp/*'):
-		os.remove(tmpfile)
-	for crtfile in glob.glob('/tmp/*'):
-		os.remove(crtfile)
+	#for tmpfile in glob.glob('./*'):
+	#	os.remove(tmpfile)
+	#for crtfile in glob.glob('./*'):
+	#	os.remove(crtfile)
 
 	#return res.stdout.decode("utf8")
 	mes = res.stdout.decode("utf8")
