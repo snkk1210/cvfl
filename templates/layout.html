@@ -9,8 +9,8 @@
         <body>
 		<h4><font color="red">{{ message }}</font></h4>
                 <h4>証明書の整合性確認</h4>
-                <!-- <form method="post" action="/certificateCheck/exec-script"> -->
-                <form method="post" action="/exec-script" enctype="multipart/form-data">
+                <!-- <form method="post" action="/certificateCheck/exec"> -->
+                <form method="post" action="/exec" enctype="multipart/form-data">
                         <input name="certificate" type="file">
                         <input name="privatekey" type="file">
                         <input name="intermediate" type="file">
