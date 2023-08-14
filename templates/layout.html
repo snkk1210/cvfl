@@ -11,9 +11,9 @@
                 <h4>証明書の整合性確認</h4>
                 <!-- <form method="post" action="/certificateCheck/exec"> -->
                 <form method="post" action="/exec" enctype="multipart/form-data">
-                        <input name="certificate" type="file">
-                        <input name="privatekey" type="file">
-                        <input name="intermediate" type="file">
+                        <input name="cert" type="file">
+                        <input name="privkey" type="file">
+                        <input name="chain" type="file">
                         <input type="submit" name="s" value="実行">
                 </form>
 		<h2>{{ restitle }}</h2>
