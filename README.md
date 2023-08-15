@@ -11,8 +11,8 @@ AWS Lambda にデプロイします。
 ### 0. 必要なパッケージ 導入
 
 ```
-yum groupinstall "Development tools" -y
-yum install zlib-devel openssl-devel sqlite-devel libffi-devel -y
+sudo yum groupinstall "Development tools" -y
+sudo yum install zlib-devel openssl-devel sqlite-devel libffi-devel -y
 ```
 
 ### 1. pyenv 導入
