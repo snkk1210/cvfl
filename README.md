@@ -51,10 +51,10 @@ aws configure
 ### 5. ソース 取得
 
 ```
-pyenv virtualenv 3.7.17 cvfl
+pyenv virtualenv 3.7.17 venv
 git clone https://github.com/snkk1210/cvfl.git
 cd cvfl
-pyenv local cvfl
+pyenv local venv
 ```
 
 ### 6. モジュール 導入
