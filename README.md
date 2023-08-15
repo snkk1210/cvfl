@@ -1,4 +1,4 @@
-certificate_verify_flask_lambda
+cvfl
 =========
 
 ## これは何？
@@ -51,8 +51,8 @@ aws configure
 
 ```
 pyenv virtualenv 3.7.17 cvfl
-git clone https://github.com/snkk1210/certificate_verify_flask_lambda.git 
-cd certificate_verify_flask_lambda
+git clone https://github.com/snkk1210/cvfl.git
+cd cvfl
 pyenv local cvfl
 ```
 
