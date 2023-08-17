@@ -40,17 +40,17 @@ isEmpty ${CA_SUBJECT_HASH} "CA_SUBJECT_HASH"
 
 # MEMO: 証明書 HASH と 鍵ファイル HASH を比較
 if [  "${CERT_HASH}" == "${KEY_HASH}" ]; then
-    echo "CERT_HASH and KEY_HASH are OK"
+    echo "OK: CERT_HASH and KEY_HASH<br>"
 else
-    echo "CERT_HASH and KEY_HASH are NG"
+    echo "NG: CERT_HASH and KEY_HASH<br>"
     exit 1
 fi
 
 # MEMO: 証明書 issuer HASH と CAファイル subject HASH を比較
 if [  "${CERT_ISSUER_HASH}" == "${CA_SUBJECT_HASH}" ]; then
-    echo "CERT_ISSUER_HASH and CA_SUBJECT_HASH are OK"
+    echo "OK: CERT_ISSUER_HASH and CA_SUBJECT_HASH<br>"
 else
-    echo "CERT_ISSUER_HASH and CA_SUBJECT_HASH are NG"
+    echo "NG: CERT_ISSUER_HASH and CA_SUBJECT_HASH<br>"
     exit 1
 fi
 
