@@ -70,6 +70,6 @@ pip3 install zappa
 ```
 zappa init
 ===========================================================================
-What do you want to call this environment (default 'dev'): cvfl
+What do you want to call this environment (default 'dev'): dev
 ===========================================================================
 zappa deploy
