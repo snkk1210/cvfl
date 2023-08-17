@@ -37,7 +37,7 @@ def exec():
 	for tmpfile in glob.glob('/tmp/*.pem'):
 		os.remove(tmpfile)
 
-	return render_template('layout.html', message=res.stdout, restitle="Execution Result")
+	return render_template('layout.html', message=res.stdout, restitle="Execution Result<br>")
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0')
