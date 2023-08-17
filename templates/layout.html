@@ -7,7 +7,6 @@
                 <title>CVFL</title>
         </head>
         <body>
-		<h4><font color="red">{{ message }}</font></h4>
                 <h4>証明書の整合性チェッカー</h4>
                 <form method="post" action="/dev/exec" enctype="multipart/form-data">
                 <!-- <form method="post" action="/exec" enctype="multipart/form-data"> -->
@@ -17,6 +16,6 @@
                         <input type="submit" value="実行">
                 </form>
 		<div class="restitle">{{ restitle }}</h2>
-		<div class="result">{{ result }}</h2>
+		<div class="message">{{ message }}</h2>
         </body>
 </html>
