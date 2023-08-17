@@ -13,24 +13,24 @@ def lambda_handler(event=None, context=None):
 
 @app.route('/exec', methods=['POST'])
 def exec():
-  
-	if 'cert' not in flask.request.files:
-		return render_template('layout.html', message="Certificate not selected")
 	
 	cert_fs = flask.request.files['cert']
 	cert_fs.save('/tmp/cert.pem')
 
-	if 'privkey' not in flask.request.files:
-		return render_template('layout.html', message="Private key not selected")
+	if os.path.getsize('/tmp/cert.pem') == 0:
+		return render_template('layout.html', message="Certificate not selected")
 	
 	privkey_fs = flask.request.files['privkey']
 	privkey_fs.save('/tmp/privkey.pem')
 
-	if 'chain' not in flask.request.files:
-		return render_template('layout.html', message="Intermediate certificate not selected")
+	if os.path.getsize('/tmp/privkey.pem') == 0:
+		return render_template('layout.html', message="Private key not selected")
 	
 	chain_fs = flask.request.files['chain']
 	chain_fs.save('/tmp/chain.pem')
+
+	if os.path.getsize('/tmp/chain.pem') == 0:
+		return render_template('layout.html', message="Intermediate certificate not selected")
 
 	res = subprocess.run('./app/cert_check.sh /tmp/cert.pem /tmp/privkey.pem /tmp/chain.pem', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
