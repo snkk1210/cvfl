@@ -1,11 +1,13 @@
 #!/bin/python3
 
 from flask import Flask, render_template
+from dotenv import load_dotenv
 import flask
 import subprocess
 import os
 import glob
 app = Flask(__name__)
+load_dotenv(override=True)
 env = os.getenv('ENV')
 
 @app.route('/')
