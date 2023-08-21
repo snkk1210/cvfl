@@ -54,6 +54,7 @@ aws configure
 pyenv virtualenv 3.7.17 venv
 git clone https://github.com/snkk1210/cvfl.git
 cd cvfl
+cp -p .env.example .env
 pyenv local venv
 ```
 
