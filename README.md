@@ -63,6 +63,7 @@ pyenv local venv
 pip3 install -U pip
 pip3 install flask
 pip3 install zappa
+pip3 install python-dotenv
 ```
 
 ### 7. Lambda デプロイ
