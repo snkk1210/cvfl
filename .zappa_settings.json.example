@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "app_function": "main.app",
+        "aws_region": "ap-northeast-1",
+        "profile_name": "default",
+        "project_name": "cvfl",
+        "runtime": "python3.7",
+        "domain": "xxxxxxxxx",
+        "certificate_arn": "arn:aws:acm:us-east-1:xxxxxxxxx:certificate/xxxxxxxxx",
+        "apigateway_policy": "apigateway_policy.json",
+        "endpoint_configuration": ["REGIONAL"],
+        "route53_enabled": false,
+        "s3_bucket": "zappa-xxxxxxxxx"
+    }
+}
