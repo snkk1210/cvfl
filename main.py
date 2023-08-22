@@ -18,8 +18,16 @@ def lambda_handler(event=None, context=None):
 def exec():
 	
 	uploadfile('cert')
+	if os.path.getsize('/tmp/' + type + '.pem') == 0:
+		return render_template('layout.html', message="Error: Certificate not selected", env=env)
+
 	uploadfile('privkey')
+	if os.path.getsize('/tmp/' + type + '.pem') == 0:
+		return render_template('layout.html', message="Error: Private key not selected", env=env)
+	
 	uploadfile('chain')
+	if os.path.getsize('/tmp/' + type + '.pem') == 0:
+		return render_template('layout.html', message="Error: Intermediate certificate not selected", env=env)
 
 	res = subprocess.run('./app/cert_check.sh /tmp/cert.pem /tmp/privkey.pem /tmp/chain.pem', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
@@ -31,9 +39,6 @@ def exec():
 def uploadfile(type):
 	file = flask.request.files[type]
 	file.save('/tmp/' + type + '.pem')
-
-	if os.path.getsize('/tmp/' + type + '.pem') == 0:
-		return render_template('layout.html', message="Error: " + type + "not selected", env=env)
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0')
