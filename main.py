@@ -18,15 +18,15 @@ def lambda_handler(event=None, context=None):
 def exec():
 	
 	uploadfile('cert')
-	if os.path.getsize('/tmp/' + type + '.pem') == 0:
+	if os.path.getsize('/tmp/cert.pem') == 0:
 		return render_template('layout.html', message="Error: Certificate not selected", env=env)
 
 	uploadfile('privkey')
-	if os.path.getsize('/tmp/' + type + '.pem') == 0:
+	if os.path.getsize('/tmp/privkey.pem') == 0:
 		return render_template('layout.html', message="Error: Private key not selected", env=env)
 	
 	uploadfile('chain')
-	if os.path.getsize('/tmp/' + type + '.pem') == 0:
+	if os.path.getsize('/tmp/chain.pem') == 0:
 		return render_template('layout.html', message="Error: Intermediate certificate not selected", env=env)
 
 	res = subprocess.run('./app/cert_check.sh /tmp/cert.pem /tmp/privkey.pem /tmp/chain.pem', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
