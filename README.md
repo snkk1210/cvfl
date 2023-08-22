@@ -109,7 +109,7 @@ zappa_settings.json に下記項目を追記
 cp -p ./.apigateway_policy.json.example ./apigateway_policy.json
 ```
 
-apigateway_policy.json に接続許可元 IP アドレスを記述
+apigateway_policy.json に接続元 IP アドレスを記述
 ```
           "aws:SourceIp": [
             "xx.xx.xx.xx/32"
