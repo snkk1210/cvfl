@@ -17,23 +17,9 @@ def lambda_handler(event=None, context=None):
 @app.route('/exec', methods=['POST'])
 def exec():
 	
-	cert_fs = flask.request.files['cert']
-	cert_fs.save('/tmp/cert.pem')
-
-	if os.path.getsize('/tmp/cert.pem') == 0:
-		return render_template('layout.html', message="Error: Certificate not selected", env=env)
-	
-	privkey_fs = flask.request.files['privkey']
-	privkey_fs.save('/tmp/privkey.pem')
-
-	if os.path.getsize('/tmp/privkey.pem') == 0:
-		return render_template('layout.html', message="Error: Private key not selected", env=env)
-	
-	chain_fs = flask.request.files['chain']
-	chain_fs.save('/tmp/chain.pem')
-
-	if os.path.getsize('/tmp/chain.pem') == 0:
-		return render_template('layout.html', message="Error: Intermediate certificate not selected", env=env)
+	uploadfile('cert')
+	uploadfile('privkey')
+	uploadfile('chain')
 
 	res = subprocess.run('./app/cert_check.sh /tmp/cert.pem /tmp/privkey.pem /tmp/chain.pem', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
 
@@ -41,6 +27,13 @@ def exec():
 		os.remove(tmpfile)
 
 	return render_template('layout.html', message=res.stdout.decode("utf8"), restitle="Execution Result", env=env)
+
+def uploadfile(type):
+	file = flask.request.files[type]
+	file.save('/tmp/' + type + '.pem')
+
+	if os.path.getsize('/tmp/' + type + '.pem') == 0:
+		return render_template('layout.html', message="Error: " + type + "not selected", env=env)
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0')
