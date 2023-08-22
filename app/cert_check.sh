@@ -21,7 +21,7 @@ function isEmpty(){
     fi
 }
 
-# MEMO: 証明書ファイルの HASH 値 を出力
+# MEMO: 各種ファイルの HASH 値 を取得
 CERT_HASH=`openssl x509 -noout -modulus -in ${1} | md5sum 2> /dev/null`
 checkExitCode "openssl x509 -noout -modulus -in ${1} | md5sum"
 isEmpty ${CERT_HASH} "CERT_HASH"
