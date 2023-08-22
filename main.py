@@ -37,6 +37,17 @@ def exec():
 	return render_template('layout.html', message=res.stdout.decode("utf8"), restitle="Execution Result", env=env)
 
 def uploadfile(type):
+	"""
+	Save the files in the request
+
+	Parameters
+	----------
+	type : string
+
+	Returns
+	-------
+	None
+	"""
 	file = flask.request.files[type]
 	file.save('/tmp/' + type + '.pem')
 
