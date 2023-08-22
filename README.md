@@ -79,7 +79,7 @@ zappa deploy
 
 - カスタムドメインを使う場合
 
-zappa_settings.json に下記項目を追記
+zappa_settings.json に下記フィールドを追記
 ```
         "domain": "xxxxxxxxx",
         "certificate_arn": "arn:aws:acm:us-east-1:xxxxxxxxx:certificate/xxxxxxxxx",
@@ -99,7 +99,7 @@ zappa certify
 
 - 接続元 IP アドレスを絞る場合
 
-zappa_settings.json に下記項目を追記
+zappa_settings.json に下記フィールドを追記
 ```
        "apigateway_policy": "apigateway_policy.json",
 ```
@@ -109,7 +109,7 @@ zappa_settings.json に下記項目を追記
 cp -p ./.apigateway_policy.json.example ./apigateway_policy.json
 ```
 
-apigateway_policy.json に接続元 IP アドレスを記述
+apigateway_policy.json の下記フィールドに接続元 IP アドレスを追記
 ```
           "aws:SourceIp": [
             "xx.xx.xx.xx/32"
