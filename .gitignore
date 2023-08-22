@@ -1,3 +1,4 @@
 /zappa_settings.json
 /.python-version
 /.env
+/apigateway_policy.json
