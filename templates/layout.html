@@ -2,12 +2,12 @@
 <html lang = "ja">
         <head>
                 <meta charset = "UTF-8">
-                <link rel="stylesheet" href="/{{ env }}/static/css/default.css" type="text/css">
+                <link rel="stylesheet" href="{{ env }}static/css/default.css" type="text/css">
                 <title>CVFL</title>
         </head>
         <body>
                 <h4>証明書の整合性チェッカー</h4>
-                <form method="post" action="/{{ env }}/exec" enctype="multipart/form-data">
+                <form method="post" action="{{ env }}exec" enctype="multipart/form-data">
                         <div class="item">証明書　　：<input name="cert" type="file"></div>
                         <div class="item">秘密鍵　　：<input name="privkey" type="file"></div>
                         <div class="item">中間証明書：<input name="chain" type="file"></div>
