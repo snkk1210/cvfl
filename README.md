@@ -58,13 +58,16 @@ cp -p .env.example .env
 pyenv local venv
 ```
 
-### 6. OpenSSL バイナリ　導入
+### 6. OpenSSL バイナリ 導入
 
 ```
 sudo systemctl start docker
 sudo docker build -t al2 .
 sudo docker run --detach --name tmp al2
 sudo docker cp tmp:/usr/bin/openssl ./bin/
+sudo docker stop tmp
+sudo docker rm tmp
+sudo docker rmi al2
 ```
 
 ### 7. モジュール 導入
