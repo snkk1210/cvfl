@@ -35,7 +35,7 @@ checkExitCode "openssl x509 -issuer_hash -noout -in ${1}"
 isEmpty ${CERT_ISSUER_HASH} "CERT_ISSUER_HASH"
 
 CA_SUBJECT_HASH=`openssl x509 -subject_hash -noout -in ${3} 2> /dev/null`
-checkExitCode "penssl x509 -subject_hash -noout -in ${3}"
+checkExitCode "openssl x509 -subject_hash -noout -in ${3}"
 isEmpty ${CA_SUBJECT_HASH} "CA_SUBJECT_HASH"
 
 # MEMO: 証明書 HASH と 鍵ファイル HASH を比較
