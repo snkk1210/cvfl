@@ -33,7 +33,7 @@ echo 'eval "$(pyenv virtualenv-init -)"' >> ~/.bash_profile
 exec $SHELL -l
 ```
 
-### 3. 3.7 系 Python 導入
+### 3. 3.10 系 Python 導入
 
 ```
 pyenv install 3.10.12
