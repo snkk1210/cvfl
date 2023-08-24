@@ -10,8 +10,10 @@ SSL 証明書の整合性をチェックできる WEB ツールです。
 ### 0. 必要なパッケージ 導入
 
 ```
-sudo yum groupinstall "Development tools" -y
-sudo yum install zlib-devel openssl-devel sqlite-devel libffi-devel -y
+sudo dnf groupinstall "Development tools" -y
+sudo dnf install zlib-devel openssl-devel sqlite-devel libffi-devel -y
+sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo dnf install docker-ce docker-ce-cli containerd.io -y
 ```
 
 ### 1. pyenv 導入
@@ -59,6 +61,7 @@ pyenv local venv
 ### 6. OpenSSL バイナリ　導入
 
 ```
+sudo systemctl start docker
 sudo docker build -t al2 .
 sudo docker run --detach --name tmp al2
 sudo docker cp tmp:/usr/bin/openssl ./bin/
