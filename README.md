@@ -34,8 +34,8 @@ exec $SHELL -l
 ### 3. 3.7 系 Python 導入
 
 ```
-pyenv install 3.7.17
-pyenv global 3.7.17
+pyenv install 3.10.12
+pyenv global 3.10.12
 ```
 
 ### 4. AWS CLI 導入
