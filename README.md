@@ -49,14 +49,22 @@ aws configure
 ### 5. ソース 取得
 
 ```
-pyenv virtualenv 3.7.17 venv
+pyenv virtualenv 3.10.12 venv
 git clone https://github.com/snkk1210/cvfl.git
 cd cvfl
 cp -p .env.example .env
 pyenv local venv
 ```
 
-### 6. モジュール 導入
+### 6. OpenSSL バイナリ　導入
+
+```
+sudo docker build -t al2 .
+sudo docker run --detach --name tmp al2
+sudo docker cp tmp:/usr/bin/openssl ./bin/
+```
+
+### 7. モジュール 導入
 
 ```
 pip3 install -U pip
@@ -65,7 +73,7 @@ pip3 install zappa
 pip3 install python-dotenv
 ```
 
-### 7. デプロイ
+### 8. デプロイ
 
 - 通常
 
