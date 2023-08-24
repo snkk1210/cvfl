@@ -2,3 +2,4 @@
 /.python-version
 /.env
 /apigateway_policy.json
+/bin/openssl
