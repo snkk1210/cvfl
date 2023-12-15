@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cvfl-deployment
+spec:
+  replicas: <REPLICAS>
+  selector:
+    matchLabels:
+      app: cvfl
+  template:
+    metadata:
+      labels:
+        app: cvfl
+    spec:
+      containers:
+      - name: cvfl
+        image: <ECR_URI>:<IMAGE_TAG>
+        imagePullPolicy: always
+        ports:
+        - containerPort: 5000
