@@ -8,7 +8,7 @@ phases:
   pre_build:
     commands:
       - IMAGE_TAG=$(git rev-parse --short HEAD)
-      - $(aws ecr get-login --no-include-email --region ${REGION})
+      - aws ecr get-login-password | docker login --username AWS --password-stdin https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
   build:
     commands:
       - cp -p .env.example .env && sed -i 's/ENV='\''\/dev\/'\''/ENV='\''\/'\''/' .env
