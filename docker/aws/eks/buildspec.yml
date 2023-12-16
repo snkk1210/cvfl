@@ -24,6 +24,6 @@ phases:
       - sed -i "s|<REPLICAS>|${REPLICAS}|g" ./docker/aws/eks/k8s/deployment.yml
       - sed -i "s|<ECR_URI>|${ECR_URI}|g" ./docker/aws/eks/k8s/deployment.yml
       - sed -i "s|<IMAGE_TAG>|${IMAGE_TAG}|g" ./docker/aws/eks/k8s/deployment.yml
-      - cat ./docker/k8s/deployment.yml
-      - cat ./docker/k8s/service.yml
-      - kubectl apply -f ./docker/k8s/
+      - cat ./docker/aws/eks/k8s/deployment.yml
+      - cat ./docker/aws/eks/k8s/service.yml
+      - kubectl apply -f ./docker/aws/eks/k8s/
