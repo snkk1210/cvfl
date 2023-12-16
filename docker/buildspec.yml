@@ -7,18 +7,23 @@ phases:
       python: 3.x
   pre_build:
     commands:
+      - echo "Starting pre-build phase"
       - IMAGE_TAG=$(git rev-parse --short HEAD)
       - aws ecr get-login-password | docker login --username AWS --password-stdin https://${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
   build:
     commands:
+      - echo "Starting build phase"
       - cp -p .env.example .env && sed -i 's/ENV='\''\/dev\/'\''/ENV='\''\/'\''/' .env
       - docker build -f docker/Dockerfile -t src_cvfl .
       - docker tag src_cvfl ${ECR_URI}:${IMAGE_TAG}
   post_build:
     commands:
+      - echo "Starting post-build phase"
       - docker push ${ECR_URI}:${IMAGE_TAG}
       - aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}
       - sed -i "s|<REPLICAS>|${REPLICAS}|g" ./docker/k8s/deployment.yml
       - sed -i "s|<ECR_URI>|${ECR_URI}|g" ./docker/k8s/deployment.yml
       - sed -i "s|<IMAGE_TAG>|${IMAGE_TAG}|g" ./docker/k8s/deployment.yml
+      - cat ./docker/k8s/deployment.yml
+      - cat ./docker/k8s/service.yml
       - kubectl apply -f ./docker/k8s/
