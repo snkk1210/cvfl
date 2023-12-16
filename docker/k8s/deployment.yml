@@ -15,6 +15,6 @@ spec:
       containers:
       - name: cvfl
         image: <ECR_URI>:<IMAGE_TAG>
-        imagePullPolicy: always
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
