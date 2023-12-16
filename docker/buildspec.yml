@@ -18,7 +18,7 @@ phases:
     commands:
       - docker push ${ECR_URI}:${IMAGE_TAG}
       - aws eks --region ${AWS_REGION} update-kubeconfig --name ${EKS_CLUSTER_NAME}
-      - sed -i 's/<REPLICAS>/${REPLICAS}/g' ./docker/k8s/deployment.yml
-      - sed -i 's/<ECR_URI>/${ECR_URI}/g' ./docker/k8s/deployment.yml
-      - sed -i 's/<IMAGE_TAG>/${IMAGE_TAG}/g' ./docker/k8s/deployment.yml
+      - sed -i "s|<REPLICAS>|${REPLICAS}|g" ./docker/k8s/deployment.yml
+      - sed -i "s|<ECR_URI>|${ECR_URI}|g" ./docker/k8s/deployment.yml
+      - sed -i "s|<IMAGE_TAG>|${IMAGE_TAG}|g" ./docker/k8s/deployment.yml
       - kubectl apply -f ./docker/k8s/
