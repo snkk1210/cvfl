@@ -2,6 +2,7 @@
 
 from flask import Flask, render_template
 from dotenv import load_dotenv
+from app.certificate_verifier import CertificateVerifier
 import flask
 import subprocess
 import os
@@ -30,7 +31,8 @@ def exec():
 	if os.path.getsize('/tmp/chain.pem') == 0:
 		return render_template('layout.html', message="Error: Intermediate certificate not selected", env=env)
 
-	res = subprocess.run('./app/cert_check.sh /tmp/cert.pem /tmp/privkey.pem /tmp/chain.pem', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+	cv = CertificateVerifier("/tmp/cert.pem", "/tmp/privkey.pem", "/tmp/chain.pem")
+	res = cv.verify_certificate_integrity()
 
 	for tmpfile in glob.glob('/tmp/*.pem'):
 		os.remove(tmpfile)
