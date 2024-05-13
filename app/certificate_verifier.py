@@ -22,6 +22,8 @@ class CertificateVerifier:
             md5_hash = hashlib.md5(modulus.to_bytes((modulus.bit_length() + 7) // 8, byteorder='big')).hexdigest()
 
             return md5_hash
+        except FileNotFoundError:
+            return "ERROR: Certificate file not found."
         except ValueError as e:
             return f"ERROR: Unable to load PEM file. {e}"
         except Exception as e:
@@ -106,7 +108,7 @@ class CertificateVerifier:
             cert_issuer_cn = self.get_certificate_issuer_cn()
             ca_subject_cn = self.get_certificate_subject_cn()
             cert_dates = self.get_certificate_dates()
-    
+
             if cert_modulus_hash == key_modulus_hash:
                 if cert_issuer_cn == ca_subject_cn:
                     return cert_dates
