@@ -36,7 +36,7 @@ def exec():
 	for tmpfile in glob.glob('/tmp/*.pem'):
 		os.remove(tmpfile)
 
-	return render_template('layout.html', message=res.stdout.decode("utf8"), restitle="Execution Result", env=env)
+	return render_template('layout.html', message=res.decode("utf8"), restitle="Execution Result", env=env)
 
 def uploadfile(type):
 	"""
