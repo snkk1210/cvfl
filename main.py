@@ -4,7 +4,6 @@ from flask import Flask, render_template
 from dotenv import load_dotenv
 from app.certificate_verifier import CertificateVerifier
 import flask
-import subprocess
 import os
 import glob
 
