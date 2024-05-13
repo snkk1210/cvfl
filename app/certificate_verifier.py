@@ -102,19 +102,17 @@ class CertificateVerifier:
             return f"ERROR: An unexpected error occurred. {e}"
     
     def verify_certificate_integrity(self):
-        try:
-            cert_modulus_hash = self.get_certificate_modulus_md5()
-            key_modulus_hash = self.get_rsa_modulus_md5()
-            cert_issuer_cn = self.get_certificate_issuer_cn()
-            ca_subject_cn = self.get_certificate_subject_cn()
-            cert_dates = self.get_certificate_dates()
+        for method_name in ["get_certificate_modulus_md5", "get_rsa_modulus_md5",
+                            "get_certificate_issuer_cn", "get_certificate_subject_cn",
+                            "get_certificate_dates"]:
+            result = getattr(self, method_name)()
+            if isinstance(result, str) and result.startswith("ERROR"):
+                return result
 
-            if cert_modulus_hash == key_modulus_hash:
-                if cert_issuer_cn == ca_subject_cn:
-                    return cert_dates
-                else:
-                    return "ERROR: CERT_ISSUER_CN and CA_SUBJECT_CN"
+        if self.get_certificate_modulus_md5() == self.get_rsa_modulus_md5():
+            if self.get_certificate_issuer_cn() == self.get_certificate_subject_cn():
+                return self.get_certificate_dates()
             else:
-                return "ERROR: CERT_MODULUS_HASH and KEY_MODULUS_HASH"
-        except Exception as e:
-            return f"ERROR: An unexpected error occurred. {e}"
+                return "ERROR: The issuer of the certificate does not match the CA subject."
+        else:
+            return "ERROR: The modulus hash of the certificate does not match the modulus hash of the private key."
