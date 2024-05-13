@@ -79,6 +79,3 @@ class CertificateVerifier:
                 return "ERROR: CERT_ISSUER_CN and CA_SUBJECT_CN"
         else:
             return "ERROR: CERT_MODULUS_HASH and KEY_MODULUS_HASH"
-
-
-
