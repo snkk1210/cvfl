@@ -68,12 +68,12 @@ class CertificateVerifier:
     def verify_certificate_integrity(self):
         cert_modulus_hash = self.get_certificate_modulus_md5()
         key_modulus_hash = self.get_rsa_modulus_md5()
-        cert_issuer_hash = self.get_certificate_issuer_cn()
-        ca_subject_hash = self.get_certificate_subject_cn()
+        cert_issuer_cn = self.get_certificate_issuer_cn()
+        ca_subject_cn = self.get_certificate_subject_cn()
         cert_dates = self.get_certificate_dates()
 
         if cert_modulus_hash == key_modulus_hash:
-            if cert_issuer_hash == ca_subject_hash:
+            if cert_issuer_cn == ca_subject_cn:
                 return cert_dates
             else:
                 return "NG: CERT_ISSUER_CN and CA_SUBJECT_CN"
