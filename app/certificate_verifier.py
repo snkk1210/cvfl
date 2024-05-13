@@ -76,9 +76,9 @@ class CertificateVerifier:
             if cert_issuer_cn == ca_subject_cn:
                 return cert_dates
             else:
-                return "NG: CERT_ISSUER_CN and CA_SUBJECT_CN"
+                return "ERROR: CERT_ISSUER_CN and CA_SUBJECT_CN"
         else:
-            return "NG: CERT_HASH and KEY_HASH"
+            return "ERROR: CERT_MODULUS_HASH and KEY_MODULUS_HASH"
 
 
 
