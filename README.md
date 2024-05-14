@@ -121,5 +121,5 @@ zappa deploy
 
 ## Usage
 
-Select a certificate, private key, and intermediate certificate, and press "Execute".  
+Select a Certificate, Private key, and Intermediate Cert, and press "Execute".  
 If the expiration date is displayed, the integrity of the certificate is maintained.
