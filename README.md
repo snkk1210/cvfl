@@ -14,12 +14,6 @@ sudo dnf groupinstall "Development tools" -y
 sudo dnf install zlib-devel openssl-devel sqlite-devel libffi-devel -y
 ```
 
-```
-pip3 install -U pip
-pip3 install awscli
-aws configure
-```
-
 ### 2. Building a Python environment 
 
 - pyenv
@@ -44,6 +38,14 @@ exec $SHELL -l
 ```
 pyenv install 3.10.12
 pyenv global 3.10.12
+```
+
+- AWS CLI
+
+```
+pip3 install -U pip
+pip3 install awscli
+aws configure
 ```
 
 ### 3. Get Source Code
