@@ -2,8 +2,8 @@
 
 from flask import Flask, render_template
 from dotenv import load_dotenv
+from app.certificate_verifier import CertificateVerifier
 import flask
-import subprocess
 import os
 import glob
 
@@ -20,22 +20,23 @@ def exec():
 	
 	uploadfile('cert')
 	if os.path.getsize('/tmp/cert.pem') == 0:
-		return render_template('layout.html', message="Error: Certificate not selected", env=env)
+		return render_template('layout.html', message="ERROR: Certificate not selected", env=env)
 
 	uploadfile('privkey')
 	if os.path.getsize('/tmp/privkey.pem') == 0:
-		return render_template('layout.html', message="Error: Private key not selected", env=env)
+		return render_template('layout.html', message="ERROR: Private Key not selected", env=env)
 	
 	uploadfile('chain')
 	if os.path.getsize('/tmp/chain.pem') == 0:
-		return render_template('layout.html', message="Error: Intermediate certificate not selected", env=env)
+		return render_template('layout.html', message="ERROR: Intermediate Certificate not selected", env=env)
 
-	res = subprocess.run('./app/cert_check.sh /tmp/cert.pem /tmp/privkey.pem /tmp/chain.pem', shell=True, stdout = subprocess.PIPE, stderr = subprocess.PIPE)
+	cv = CertificateVerifier("/tmp/cert.pem", "/tmp/privkey.pem", "/tmp/chain.pem")
+	res = cv.verify_certificate_integrity()
 
 	for tmpfile in glob.glob('/tmp/*.pem'):
 		os.remove(tmpfile)
 
-	return render_template('layout.html', message=res.stdout.decode("utf8"), restitle="Execution Result", env=env)
+	return render_template('layout.html', message=res, result_title="Execution Result", env=env)
 
 def uploadfile(type):
 	"""
