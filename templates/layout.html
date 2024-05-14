@@ -8,9 +8,9 @@
         <body>
                 <h4>Certificate Integrity Checker</h4>
                 <form method="post" action="{{ env }}exec" enctype="multipart/form-data">
-                        <div class="item">Certificate      :<input name="cert" type="file"></div>
-                        <div class="item">Private key      :<input name="privkey" type="file"></div>
-                        <div class="item">Intermediate Cert: <input name="chain" type="file"></div>
+                        <div class="item">Certificate:<input name="cert" type="file"></div>
+                        <div class="item">Private key:<input name="privkey" type="file"></div>
+                        <div class="item">Inter Cert :<input name="chain" type="file"></div>
                         <input type="submit" value="Execute">
                 </form>
 		<div class="restitle">{{ restitle }}</div>
