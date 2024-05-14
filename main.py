@@ -20,15 +20,15 @@ def exec():
 	
 	uploadfile('cert')
 	if os.path.getsize('/tmp/cert.pem') == 0:
-		return render_template('layout.html', message="Error: Certificate not selected", env=env)
+		return render_template('layout.html', message="ERROR: Certificate not selected", env=env)
 
 	uploadfile('privkey')
 	if os.path.getsize('/tmp/privkey.pem') == 0:
-		return render_template('layout.html', message="Error: Private key not selected", env=env)
+		return render_template('layout.html', message="ERROR: Private Key not selected", env=env)
 	
 	uploadfile('chain')
 	if os.path.getsize('/tmp/chain.pem') == 0:
-		return render_template('layout.html', message="Error: Intermediate certificate not selected", env=env)
+		return render_template('layout.html', message="ERROR: Intermediate Certificate not selected", env=env)
 
 	cv = CertificateVerifier("/tmp/cert.pem", "/tmp/privkey.pem", "/tmp/chain.pem")
 	res = cv.verify_certificate_integrity()
