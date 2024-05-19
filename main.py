@@ -18,9 +18,9 @@ env = os.getenv('ENV')
 def lambda_handler(event=None, context=None):
 	max_age_sec = 300
 	expires = int(datetime.datetime.now().timestamp()) + max_age_sec
-	resp = make_response(render_template('layout.html', env=env))
 	session_id = os.urandom(24).hex()
 	session_info = {'id':session_id}
+	resp = make_response(render_template('layout.html', env=env))
 	resp.set_cookie('id', value=json.dumps(session_info), expires=expires)
 	return resp
 
