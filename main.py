@@ -1,9 +1,8 @@
 #!/bin/python3
 
-from flask import Flask, render_template
+from flask import Flask, render_template, make_response
 from dotenv import load_dotenv
 from app.certificate_verifier import CertificateVerifier
-from flask import make_response
 import flask
 import os
 import glob
@@ -27,27 +26,28 @@ def lambda_handler(event=None, context=None):
 @app.route('/exec', methods=['POST'])
 def exec():
 	
-	uploadfile('cert')
-	if os.path.getsize('/tmp/cert.pem') == 0:
+	session_id = get_session_id()
+	uploadfile('cert', session_id)
+	if os.path.getsize('/tmp/' + session_id + '/cert.pem') == 0:
 		return render_template('layout.html', message="ERROR: Certificate not selected", env=env)
 
-	uploadfile('privkey')
-	if os.path.getsize('/tmp/privkey.pem') == 0:
+	uploadfile('privkey', session_id)
+	if os.path.getsize('/tmp/' + session_id + '/privkey.pem') == 0:
 		return render_template('layout.html', message="ERROR: Private Key not selected", env=env)
 	
-	uploadfile('chain')
-	if os.path.getsize('/tmp/chain.pem') == 0:
+	uploadfile('chain', session_id)
+	if os.path.getsize('/tmp/' + session_id + '/chain.pem') == 0:
 		return render_template('layout.html', message="ERROR: Intermediate Certificate not selected", env=env)
 
-	cv = CertificateVerifier("/tmp/cert.pem", "/tmp/privkey.pem", "/tmp/chain.pem")
+	cv = CertificateVerifier('/tmp/' + session_id + '/cert.pem', '/tmp/' + session_id + '/privkey.pem', '/tmp/' + session_id + '/chain.pem')
 	res = cv.verify_certificate_integrity()
 
-	for tmpfile in glob.glob('/tmp/*.pem'):
+	for tmpfile in glob.glob('/tmp/' + session_id + '/*.pem'):
 		os.remove(tmpfile)
 
 	return render_template('layout.html', message=res, result_title="Execution Result", env=env)
 
-def uploadfile(type):
+def uploadfile(type, session_id):
 	"""
 	Save the files in the request
 
@@ -59,8 +59,28 @@ def uploadfile(type):
 	-------
 	None
 	"""
+	dir_path = '/tmp/' + session_id
+	os.makedirs(dir_path, exist_ok=True)
+
 	file = flask.request.files[type]
-	file.save('/tmp/' + type + '.pem')
+	file.save('/tmp/' + session_id + '/' + type + '.pem')
+
+def get_session_id():
+	"""
+	Get Session ID
+
+	Parameters
+	----------
+	None
+
+	Returns
+	-------
+	session_info['id']: string
+	"""
+	session_info = flask.request.cookies.get('id')
+	if session_info is not None:
+		session_info = json.loads(session_info)
+	return session_info['id']
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0')
