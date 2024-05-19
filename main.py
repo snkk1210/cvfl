@@ -3,9 +3,12 @@
 from flask import Flask, render_template
 from dotenv import load_dotenv
 from app.certificate_verifier import CertificateVerifier
+from flask import make_response
 import flask
 import os
 import glob
+import datetime
+import json
 
 app = Flask(__name__)
 load_dotenv(override=True)
@@ -13,7 +16,13 @@ env = os.getenv('ENV')
 
 @app.route('/')
 def lambda_handler(event=None, context=None):
-	return render_template('layout.html', env=env)
+	max_age_sec = 300
+	expires = int(datetime.datetime.now().timestamp()) + max_age_sec
+	resp = make_response(render_template('layout.html', env=env))
+	session_id = os.urandom(24).hex()
+	session_info = {'id':session_id}
+	resp.set_cookie('id', value=json.dumps(session_info), expires=expires)
+	return resp
 
 @app.route('/exec', methods=['POST'])
 def exec():
