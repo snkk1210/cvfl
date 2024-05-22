@@ -1,6 +1,6 @@
 #!/bin/python3
 
-from flask import Flask, render_template, make_response, redirect, request
+from flask import Flask, render_template, make_response, redirect, request, url_for
 from dotenv import load_dotenv
 from app.certificate_verifier import CertificateVerifier
 import os
@@ -32,7 +32,7 @@ def exec():
 		work_dir = '/tmp/' + session_id + '/'
 	except Exception as e:
 		print(e)
-		return redirect('/' + env)
+		return redirect(url_for('lambda_handler'))
 
 	if uploadfile(work_dir, 'cert') == 0:
 		return render_template('layout.html', message="ERROR: Certificate not selected", env=env)
