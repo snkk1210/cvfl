@@ -27,43 +27,45 @@ def lambda_handler(event=None, context=None):
 def exec():
 	
 	session_id = get_session_id()
-	uploadfile('cert', session_id)
-	if os.path.getsize('/tmp/' + session_id + '/cert.pem') == 0:
+	work_dir = '/tmp/' + session_id + '/'
+
+	uploadfile(work_dir, 'cert')
+	if os.path.getsize(work_dir + 'cert.pem') == 0:
 		return render_template('layout.html', message="ERROR: Certificate not selected", env=env)
 
-	uploadfile('privkey', session_id)
-	if os.path.getsize('/tmp/' + session_id + '/privkey.pem') == 0:
+	uploadfile(work_dir, 'privkey')
+	if os.path.getsize(work_dir + 'privkey.pem') == 0:
 		return render_template('layout.html', message="ERROR: Private Key not selected", env=env)
 	
-	uploadfile('chain', session_id)
-	if os.path.getsize('/tmp/' + session_id + '/chain.pem') == 0:
+	uploadfile(work_dir, 'chain')
+	if os.path.getsize(work_dir + 'chain.pem') == 0:
 		return render_template('layout.html', message="ERROR: Intermediate Certificate not selected", env=env)
 
-	cv = CertificateVerifier('/tmp/' + session_id + '/cert.pem', '/tmp/' + session_id + '/privkey.pem', '/tmp/' + session_id + '/chain.pem')
+	cv = CertificateVerifier(work_dir + 'cert.pem', work_dir + 'privkey.pem', work_dir + 'chain.pem')
 	res = cv.verify_certificate_integrity()
 
-	for tmpfile in glob.glob('/tmp/' + session_id + '/*.pem'):
+	for tmpfile in glob.glob(work_dir + '*.pem'):
 		os.remove(tmpfile)
 
 	return render_template('layout.html', message=res, result_title="Execution Result", env=env)
 
-def uploadfile(type, session_id):
+def uploadfile(work_dir, type):
 	"""
 	Save the files in the request
 
 	Parameters
 	----------
-	type : string
+	work_dir : string
+	file : string
 
 	Returns
 	-------
 	None
 	"""
-	dir_path = '/tmp/' + session_id
-	os.makedirs(dir_path, exist_ok=True)
+	os.makedirs(work_dir, exist_ok=True)
 
 	file = flask.request.files[type]
-	file.save('/tmp/' + session_id + '/' + type + '.pem')
+	file.save(work_dir + type + '.pem')
 
 def get_session_id():
 	"""
@@ -84,4 +86,3 @@ def get_session_id():
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0')
-	
