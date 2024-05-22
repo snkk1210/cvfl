@@ -32,7 +32,7 @@ def exec():
 		work_dir = '/tmp/' + session_id + '/'
 	except Exception as e:
 		print(e)
-		return redirect('/')
+		return redirect('/' + env)
 
 	if uploadfile(work_dir, 'cert') == 0:
 		return render_template('layout.html', message="ERROR: Certificate not selected", env=env)
