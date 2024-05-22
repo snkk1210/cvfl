@@ -1,9 +1,8 @@
 #!/bin/python3
 
-from flask import Flask, render_template, make_response
+from flask import Flask, render_template, make_response, redirect, request
 from dotenv import load_dotenv
 from app.certificate_verifier import CertificateVerifier
-import flask
 import os
 import glob
 import datetime
@@ -28,8 +27,12 @@ def lambda_handler(event=None, context=None):
 @app.route('/exec', methods=['POST'])
 def exec():
 	
-	session_id = get_session_id()
-	work_dir = '/tmp/' + session_id + '/'
+	try:
+		session_id = get_session_id()
+		work_dir = '/tmp/' + session_id + '/'
+	except Exception as e:
+		print(e)
+		return redirect('/')
 
 	if uploadfile(work_dir, 'cert') == 0:
 		return render_template('layout.html', message="ERROR: Certificate not selected", env=env)
@@ -63,7 +66,7 @@ def uploadfile(work_dir, type):
 	"""
 	os.makedirs(work_dir, exist_ok=True)
 
-	file = flask.request.files[type]
+	file = request.files[type]
 	file.save(work_dir + type + '.pem')
 
 	return os.path.getsize(work_dir + type + '.pem')
@@ -80,7 +83,7 @@ def get_session_id():
 	-------
 	session_info['id']: string
 	"""
-	session_info = flask.request.cookies.get('id')
+	session_info = request.cookies.get('id')
 	if session_info is not None:
 		session_info = json.loads(session_info)
 	
