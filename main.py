@@ -29,16 +29,13 @@ def exec():
 	session_id = get_session_id()
 	work_dir = '/tmp/' + session_id + '/'
 
-	uploadfile(work_dir, 'cert')
-	if os.path.getsize(work_dir + 'cert.pem') == 0:
+	if uploadfile(work_dir, 'cert') == 0:
 		return render_template('layout.html', message="ERROR: Certificate not selected", env=env)
 
-	uploadfile(work_dir, 'privkey')
-	if os.path.getsize(work_dir + 'privkey.pem') == 0:
+	if uploadfile(work_dir, 'privkey') == 0:
 		return render_template('layout.html', message="ERROR: Private Key not selected", env=env)
 	
-	uploadfile(work_dir, 'chain')
-	if os.path.getsize(work_dir + 'chain.pem') == 0:
+	if uploadfile(work_dir, 'chain') == 0:
 		return render_template('layout.html', message="ERROR: Intermediate Certificate not selected", env=env)
 
 	cv = CertificateVerifier(work_dir + 'cert.pem', work_dir + 'privkey.pem', work_dir + 'chain.pem')
@@ -60,12 +57,14 @@ def uploadfile(work_dir, type):
 
 	Returns
 	-------
-	None
+	os.path.getsize(work_dir + type + '.pem'): bool
 	"""
 	os.makedirs(work_dir, exist_ok=True)
 
 	file = flask.request.files[type]
 	file.save(work_dir + type + '.pem')
+
+	return os.path.getsize(work_dir + type + '.pem')
 
 def get_session_id():
 	"""
