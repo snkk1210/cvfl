@@ -15,12 +15,14 @@ env = os.getenv('ENV')
 
 @app.route('/')
 def lambda_handler(event=None, context=None):
+
 	max_age_sec = 300
 	expires = int(datetime.datetime.now().timestamp()) + max_age_sec
-	session_id = os.urandom(24).hex()
-	session_info = {'id':session_id}
+
+	session_info = gen_session_info()
 	resp = make_response(render_template('layout.html', env=env))
-	resp.set_cookie('id', value=json.dumps(session_info), expires=expires)
+	resp.set_cookie('id', value=session_info, expires=expires)
+	
 	return resp
 
 @app.route('/exec', methods=['POST'])
@@ -81,7 +83,25 @@ def get_session_id():
 	session_info = flask.request.cookies.get('id')
 	if session_info is not None:
 		session_info = json.loads(session_info)
+	
 	return session_info['id']
+
+def gen_session_info():
+	"""
+	Generate Session Information
+
+	Parameters
+	----------
+	None
+
+	Returns
+	-------
+	json.dumps(session_info): string ( json )
+	"""
+	session_id = os.urandom(24).hex()
+	session_info = {'id':session_id}
+
+	return json.dumps(session_info)
 
 if __name__ == "__main__":
 	app.run(host='0.0.0.0')
