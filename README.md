@@ -3,7 +3,9 @@ cvfl
 
 ## What is this ?
 
-A web tool to verify the integrity of SSL/TLS certificates.  
+SSL/TLS 証明書の整合性をチェックする WEB ツールです。  
+AWS 上に API Gateway + Lambda のコンポーネントを使ってデプロイできる他、 Docker を使ってローカルで起動することも可能です。  
+※ ローカルで起動する場合は [こちら](https://github.com/snkk1210/cvfl/tree/master/docker)
 
 ## Installation
 
@@ -63,7 +65,7 @@ pip3 install -U pip
 pip3 install -r requirements.txt
 ```
 
-## Deploy
+## Deploy ( AWS )
 
 ```
 zappa init
